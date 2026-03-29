@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Author;
+use App\Form\AuthorType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,11 +13,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AuthorController extends AbstractController
 {
-    #[Route('', name: 'app_admin_author')]
-    public function index(): Response
+    #[Route('/new', name: 'app_admin_author', methods: ['GET'])]
+    public function new(): Response
     {
-        return $this->render('admin/author/index.html.twig', [
-            'controller_name' => 'AuthorController',
+        $author = new Author();
+        $form = $this->createForm(AuthorType::class, $author);
+
+        return $this->render('admin/author/new.html.twig', [
+            'form' => $form,
         ]);
     }
 }
