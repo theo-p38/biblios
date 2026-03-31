@@ -2,31 +2,32 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Author;
-use App\Form\AuthorType;
+use App\Entity\Editor;
+use App\Form\EditorType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/admin/editor')]
 
-#[Route('/admin/author')]
-
-final class AuthorController extends AbstractController
+final class EditorController extends AbstractController
 {
-    #[Route('/new', name: 'app_admin_author', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_admin_editor')]
     public function new(Request $request): Response
     {
-        $author = new Author();
-        $form = $this->createForm(AuthorType::class, $author);
+        $editor = new Editor();
+        $form = $this->createForm(EditorType::class, $editor);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // faire quelque chose
         }
 
-        return $this->render('admin/author/new.html.twig', [
+        return $this->render('admin/editor/new.html.twig', [
             'form' => $form,
+            'controller_name' => 'EditorController'
         ]);
     }
 }
