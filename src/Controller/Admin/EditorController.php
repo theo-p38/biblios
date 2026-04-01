@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Editor;
 use App\Form\EditorType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EditorController extends AbstractController
 {
-    #[Route('/new', name: 'app_admin_editor')]
-    public function new(Request $request): Response
+    #[Route('/new', name: 'app_admin_editor_new', methods: ['POST', 'GET'])]
+    public function new(Request $request, EntityManagerInterface $manager): Response
     {
         $editor = new Editor();
         $form = $this->createForm(EditorType::class, $editor);
@@ -22,11 +23,23 @@ final class EditorController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // faire quelque chose
+            $manager->persist($editor);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_admin_editor');
         }
 
         return $this->render('admin/editor/new.html.twig', [
             'form' => $form,
+            'controller_name' => 'EditorController'
+        ]);
+    }
+
+
+    #[Route('', name: 'app_admin_editor', methods: ['GET'])]
+    public function adminEditorIndex(): Response
+    {
+        return $this->render('admin/editor/index.html.twig', [
             'controller_name' => 'EditorController'
         ]);
     }

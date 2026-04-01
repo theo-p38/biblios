@@ -37,7 +37,7 @@ class BookType extends AbstractType
                 'input' => 'datetime_immutable',
                 'label' => 'Date d\'édition'
             ])
-            ->add('plot', TextType::class, [
+            ->add('plot', TextareaType::class, [
                 'label' => 'Intrigue'
             ])
             ->add('pageNumber', IntegerType::class,  [
@@ -53,14 +53,15 @@ class BookType extends AbstractType
             ])
             ->add('editor', EntityType::class, [
                 'class' => Editor::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'label' => 'Editeur'
             ])
             ->add('authors', EntityType::class, [
                 'label' => 'Auteur(s)',
                 'class' => Author::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
+                'by_reference' => false //force doctrine à mettre à jour la relation
             ])
         ;
     }

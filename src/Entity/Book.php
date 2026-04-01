@@ -36,7 +36,7 @@ class Book
     private ?int $pageNumber = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?BookStatus $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]

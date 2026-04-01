@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Book;
 use App\Form\BookType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,8 +13,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin/book')]
 final class BookController extends AbstractController
 {
-    #[Route('/new', name: 'app_admin_book')]
-    public function new(Request $request): Response
+    #[Route('/new', name: 'app_admin_book_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $manager): Response
     {
         $book = new Book();
 
@@ -21,12 +22,24 @@ final class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //logic here
+            $manager->persist($book);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_admin_book');
         }
 
         return $this->render('admin/book/new.html.twig', [
-            'controller_name' => 'BookController',
-            'form' => $form
+            'form' => $form,
+            'controller_name' => 'Admin\\BookController',
         ]);
+    }
+
+    #[Route('', name: 'app_admin_book', methods: ['GET'])]
+    public function adminBookIndex(): Response
+    {
+        return $this->render('admin/book/index.html.twig', [
+                'controller_name' => 'Admin\\BookController'
+            ]
+        );
     }
 }
