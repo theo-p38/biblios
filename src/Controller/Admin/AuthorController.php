@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Author;
 use App\Form\AuthorType;
+use App\Repository\AuthorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ final class AuthorController extends AbstractController
             $manager->persist($author);
             $manager->flush();
 
-            return $this->redirectToRoute('app_admin_author');
+            return $this->redirectToRoute('app_admin_author_index');
         }
 
         return $this->render('admin/author/new.html.twig', [
@@ -33,9 +34,24 @@ final class AuthorController extends AbstractController
         ]);
     }
 
-    #[Route('', name: 'app_admin_author', methods: ['GET'])]
-    public function adminAuthorIndex(): Response
+    #[Route('', name: 'app_admin_author_index', methods: ['GET'])]
+    public function adminAuthorIndex(AuthorRepository $repository): Response
     {
-        return $this->render('admin/author/index.html.twig');
+        $authors = $repository->findAll();
+
+        return $this->render('admin/author/index.html.twig',
+        [
+            'authors' => $authors,
+            'controller_name' => 'AuthorController'
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_admin_author_show', requirements: [ 'id' => '\d+'],methods: ['GET'])]
+    public function show(?Author $author): Response
+    {
+        return $this->render('admin/author/show.html.twig', [
+            'author' => $author,
+            'controller_name' => 'AuthorController'
+        ]);
     }
 }

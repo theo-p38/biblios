@@ -30,11 +30,11 @@ class Author
     private ?\DateTimeImmutable $dateOfBirth = null;
 
     #[Assert\LessThanOrEqual('now')]
-    #[Assert\GreaterThan(propertyPath: 'dateOfBirth')]
+    #[Assert\GreaterThan(propertyPath: 'dateOfBirth', message: "La date de décès doit être postérieure à la date de naissance")]
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $dateOfDeath = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $nationality = null;
 
     /**
