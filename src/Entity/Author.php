@@ -25,9 +25,11 @@ class Author
     private ?string $name = null;
 
     #[Assert\NotBlank()]
+    #[Assert\LessThanOrEqual('now')]
     #[ORM\Column]
     private ?\DateTimeImmutable $dateOfBirth = null;
 
+    #[Assert\LessThanOrEqual('now')]
     #[Assert\GreaterThan(propertyPath: 'dateOfBirth')]
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $dateOfDeath = null;

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -17,21 +18,36 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 150)]
     private ?string $title = null;
 
+    #[Assert\Isbn(
+        type: Assert\Isbn::ISBN_10,
+        message: 'Le numéro international normalisé du livre est invalide',
+    )]
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $isbn = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Url]
     #[ORM\Column(length: 255)]
     private ?string $cover = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\LessThanOrEqual('now')]
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $editedAt = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 30)]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $plot = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Type('integer')]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $pageNumber = null;
 
