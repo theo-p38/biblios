@@ -35,9 +35,19 @@ final class AuthorController extends AbstractController
     }
 
     #[Route('', name: 'app_admin_author_index', methods: ['GET'])]
-    public function adminAuthorIndex(AuthorRepository $repository): Response
+    public function index(AuthorRepository $repository, Request $request): Response
     {
-        $authors = $repository->findAll();
+        $dates = [];
+
+        if ($request->query->has('start')) {
+            $dates['start'] = $request->query->get('start');
+        }
+
+        if ($request->query->has('end')) {
+            $dates['end'] = $request->query->get('end');
+        }
+
+        $authors = $repository->findByDateOfBirth($dates);
 
         return $this->render('admin/author/index.html.twig',
         [
