@@ -41,6 +41,9 @@
                 L'auteur n° {{ app.request.get('id') }} n'a pas été trouvé.
             </div>
         {% endif %}
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('app_admin_author_index') }}" class="btn btn-primary mt-2">Retour</a>
+        </div>
     </div>
 
 {% endblock %}
